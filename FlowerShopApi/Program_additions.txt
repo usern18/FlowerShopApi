@@ -1,0 +1,9 @@
+Add these usings to Program.cs:
+using FlowerShopApi.Services;
+using FlowerShopApi.Services.Interfaces;
+using FlowerShopApi.Repositories;
+using FlowerShopApi.Repositories.Interfaces;
+
+And register services:
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
