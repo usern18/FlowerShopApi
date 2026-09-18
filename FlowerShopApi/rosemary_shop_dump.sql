@@ -84,7 +84,8 @@ CREATE TABLE `featured_products` (
   `product_id` int NOT NULL,
   `display_order` int NOT NULL DEFAULT '1',
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  PRIMARY KEY (`featured_id`),
+  PRIMARY KEY (`featured_id`), 
+  UNIQUE KEY `uq_featured_products_product` (`product_id`),
   KEY `fk_featured_products_products` (`product_id`),
   CONSTRAINT `fk_featured_products_products` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `chk_featured_products_order` CHECK ((`display_order` > 0))
