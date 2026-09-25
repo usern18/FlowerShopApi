@@ -27,6 +27,14 @@ namespace FlowerShopApi.Repositories
                 .FirstOrDefaultAsync(p => p.ProductId == id);
         }
 
+        public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
+        {
+            return await _context.Products
+                .Include(p => p.Category)
+                .Where(p => p.CategoryId == categoryId)
+                .ToListAsync();
+        }
+
         public async Task<bool> CategoryExistsAsync(int categoryId)
         {
             return await _context.Categories.AnyAsync(c => c.CategoryId == categoryId);

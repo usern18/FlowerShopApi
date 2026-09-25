@@ -30,6 +30,14 @@ namespace FlowerShopApi.Controllers
             return Ok(product);
         }
 
+        [HttpGet("category/{categoryId:int}")]
+        public async Task<IActionResult> GetByCategory(int categoryId)
+        {
+            var products = await _productService.GetByCategoryIdAsync(categoryId);
+
+            return Ok(products);
+        }
+
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductDto dto)
