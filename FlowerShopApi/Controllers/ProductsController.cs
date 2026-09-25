@@ -23,6 +23,13 @@ namespace FlowerShopApi.Controllers
             return Ok(products);
         }
 
+        [HttpGet("out-of-stock")]
+        public async Task<IActionResult> GetOutOfStock()
+        {
+            var products = await _productService.GetOutOfStockAsync();
+            return Ok(products);
+        }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
