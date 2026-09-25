@@ -31,6 +31,13 @@ namespace FlowerShopApi.Controllers
             return Ok(products);
         }
 
+
+        [HttpGet("out-of-stock")]
+        public async Task<IActionResult> GetOutOfStock()
+        {
+            var products = await _productService.GetOutOfStockAsync();
+            return Ok(products);
+        }
         /// <summary>
         /// Отримує товар за його унікальним ідентифікатором.
         /// </summary>
