@@ -35,11 +35,6 @@ namespace FlowerShopApi.Controllers
         {
             var products = await _productService.GetByCategoryIdAsync(categoryId);
 
-            if (products == null || !products.Any())
-            {
-                return NotFound(new { message = $"Category with ID {categoryId} does not exist or has no products." });
-            }
-
             return Ok(products);
         }
 
