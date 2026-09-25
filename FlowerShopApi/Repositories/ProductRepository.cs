@@ -23,7 +23,6 @@ namespace FlowerShopApi.Repositories
         public async Task<List<Product>> GetOutOfStockAsync()
         {
             return await _context.Products
-                .Include(p => p.Category)
                 .Where(p => p.StockQuantity == 0)
                 .ToListAsync();
         }
