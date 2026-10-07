@@ -16,7 +16,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
         builder.UseEnvironment("Development");
         builder.ConfigureServices(services =>
         {
-            // Повністю видаляємо все, що стосується попередніх налаштувань AppDbContext та провайдерів
             var descriptorsToRemove = services
                 .Where(d =>
                     d.ServiceType == typeof(DbContextOptions<AppDbContext>) ||
@@ -30,9 +29,7 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             {
                 services.Remove(d);
             }
-
-            // Додаємо InMemory базу для тестів
-            services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase(_dbName));
+              services.AddDbContext<AppDbContext>(opt => opt.UseInMemoryDatabase(_dbName));
         });
     }
 

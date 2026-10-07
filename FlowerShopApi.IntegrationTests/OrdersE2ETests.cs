@@ -23,7 +23,7 @@ public class OrdersE2ETests
     {
         _factory = new CustomWebApplicationFactory();
         _client = _factory.CreateClient();
-        _factory.ResetDatabase(); // <-- Додано для ініціалізації бази
+        _factory.ResetDatabase(); 
     }
 
     [SetUp]

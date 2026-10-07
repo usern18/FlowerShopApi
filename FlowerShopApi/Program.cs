@@ -17,7 +17,6 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
     });
 
-// Реєструємо MySQL лише якщо це не тестове середовище
 if (!builder.Environment.IsEnvironment("Testing"))
 {
     builder.Services.AddDbContext<AppDbContext>(options =>
