@@ -22,6 +22,12 @@ namespace FlowerShopApi.Services
             return await _productRepository.GetAllAsync();
         }
 
+        public async Task<List<Product>> GetOutOfStockAsync()
+        {
+            _logger.LogInformation("Отримання товарів, яких немає в наявності");
+            return await _productRepository.GetOutOfStockAsync();
+        }
+
         public async Task<Product> GetByIdAsync(int id)
         {
             _logger.LogInformation("Отримання товару з id {Id}", id);
