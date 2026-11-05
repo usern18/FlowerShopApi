@@ -1,3 +1,4 @@
+
 using System.Net;
 using System.Text.Json;
 using FlowerShopApi.Exceptions;
@@ -19,6 +20,12 @@ namespace FlowerShopApi.Middleware
             {
                 await _next(context);
             }
+            catch (OperationCanceledException)
+                when (context.RequestAborted.IsCancellationRequested)
+            {
+                // Клієнт скасував запит.
+                // Не намагаємося надсилати відповідь.
+            }
             catch (BadRequestException ex)
             {
                 await WriteErrorResponse(context, HttpStatusCode.BadRequest, ex.Message);
@@ -35,9 +42,12 @@ namespace FlowerShopApi.Middleware
             {
                 await WriteErrorResponse(context, HttpStatusCode.NotFound, ex.Message);
             }
-            catch (InternalServerException ex)
+            catch (InternalServerException)
             {
-                await WriteErrorResponse(context, HttpStatusCode.InternalServerError, ex.Message);
+                await WriteErrorResponse(
+                    context,
+                    HttpStatusCode.InternalServerError,
+                    "Внутрішня помилка сервера");
             }
             catch (Exception)
             {
@@ -48,19 +58,35 @@ namespace FlowerShopApi.Middleware
             }
         }
 
-        private static async Task WriteErrorResponse(HttpContext context, HttpStatusCode statusCode, string message)
+        private static async Task WriteErrorResponse(
+            HttpContext context,
+            HttpStatusCode statusCode,
+            string message)
         {
+            if (context.RequestAborted.IsCancellationRequested)
+            {
+                return;
+            }
+
+            if (context.Response.HasStarted)
+            {
+                return;
+            }
+
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)statusCode;
 
             var response = new
             {
                 statusCode = context.Response.StatusCode,
-                message = message
+                message
             };
 
             var json = JsonSerializer.Serialize(response);
-            await context.Response.WriteAsync(json);
+
+            await context.Response.WriteAsync(
+                json,
+                context.RequestAborted);
         }
     }
 }
