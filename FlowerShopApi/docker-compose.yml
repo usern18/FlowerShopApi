@@ -1,31 +1,54 @@
-version: '3.9'
-
 services:
   flowershopapi:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: flowershopapi
     ports:
       - "5239:8080"
     environment:
-      ConnectionStrings__DefaultConnection: "server=mysql;port=3306;database=rosemary_shop;user=root;password=1234;"
-      Jwt__Key: "super_secret_key_12345_very_long_key"
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: 8080
+      ConnectionStrings__DefaultConnection: "server=mysql;port=3306;database=rosemary_shop;user=root;password=${DB_PASSWORD:?Set DB_PASSWORD in FlowerShopApi/.env};"
+      Jwt__Key: "${JWT_KEY:?Set JWT_KEY in FlowerShopApi/.env}"
       Jwt__Issuer: "FlowerShopApi"
       Jwt__Audience: "FlowerShopApiUsers"
       GoogleAuth__ClientId: "399688547964-m2697raj5o8apecehmr7lbjj6k3o8cua.apps.googleusercontent.com"
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
 
   mysql:
     image: mysql:8.0
     container_name: rosemary_mysql
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_ROOT_PASSWORD: "${DB_PASSWORD:?Set DB_PASSWORD in FlowerShopApi/.env}"
       MYSQL_DATABASE: rosemary_shop
     ports:
       - "3307:3306"
     volumes:
       - mysql_data:/var/lib/mysql
+    healthcheck:
+      test:
+        - CMD-SHELL
+        - MYSQL_PWD="$${MYSQL_ROOT_PASSWORD}" mysql -h 127.0.0.1 -uroot -e "SELECT 1" > /dev/null 2>&1
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 20s
+
+  frontend:
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
+    container_name: flowershop_frontend
+    ports:
+      - "5500:80"
+    depends_on:
+      - flowershopapi
+    restart: unless-stopped
 
 volumes:
   mysql_data:
+    name: flowershopapi_mysql_data
