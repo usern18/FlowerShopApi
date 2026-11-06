@@ -375,3 +375,7 @@ CoverageReport/
 .env
 .env.*
 !.env.example
+
+# Database backups
+rosemary_shop.sql
+*.sql
