@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
+using FlowerShopApi.Tests;
 
 namespace FlowerShopApi.Tests.IntegrationTests
 {
@@ -39,7 +40,7 @@ namespace FlowerShopApi.Tests.IntegrationTests
                 .Setup(r => r.GetAllAsync())
                 .ReturnsAsync(products);
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");
@@ -55,6 +56,12 @@ namespace FlowerShopApi.Tests.IntegrationTests
 
             // Act - справжній HTTP-запит до тестового API
             var response = await client.GetAsync("/api/products");
+            var responseBody = await response.Content.ReadAsStringAsync();
+
+            Assert.True(
+                response.IsSuccessStatusCode,
+                $"HTTP {(int)response.StatusCode}: {responseBody}"
+            );
 
             // Assert - перевірка відповіді
             Assert.Equal(HttpStatusCode.OK, response.StatusCode);
@@ -91,7 +98,7 @@ namespace FlowerShopApi.Tests.IntegrationTests
                 .Setup(r => r.GetByIdAsync(5))
                 .ReturnsAsync(product);
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");
@@ -135,7 +142,7 @@ namespace FlowerShopApi.Tests.IntegrationTests
                 .Setup(r => r.GetByIdAsync(99999))
                 .ReturnsAsync((Product)null!);
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");
@@ -178,7 +185,7 @@ namespace FlowerShopApi.Tests.IntegrationTests
             // Arrange - підготовка підробленого репозиторію
             var mockRepository = new Mock<IProductRepository>();
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");

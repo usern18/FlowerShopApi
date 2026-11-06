@@ -65,7 +65,7 @@ namespace FlowerShopApi.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var order = await _orderService.GetByIdAsync(id);
+            var order = await _orderService.GetMyOrderByIdAsync(id);
             return Ok(order);
         }
 

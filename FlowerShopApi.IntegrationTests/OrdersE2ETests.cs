@@ -23,7 +23,7 @@ public class OrdersE2ETests
     {
         _factory = new CustomWebApplicationFactory();
         _client = _factory.CreateClient();
-        _factory.ResetDatabase(); 
+        _factory.ResetDatabase();
     }
 
     [SetUp]
@@ -90,13 +90,64 @@ public class OrdersE2ETests
             new UpdateOrderStatusDto { Status = "completed" });
         Assert.That(statusResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
 
-        var finalResponse = await _client.GetAsync($"/api/orders/{orderId}");
-        var finalOrder = await finalResponse.Content.ReadFromJsonAsync<JsonElement>();
-        var status = finalOrder.TryGetProperty("status", out var s)
-            ? s.GetString()
-            : finalOrder.GetProperty("Status").GetString();
+        var finalResponse = await _client.GetAsync("/api/orders");
+        Assert.That(finalResponse.StatusCode, Is.EqualTo(HttpStatusCode.OK));
+
+        var orders = await finalResponse.Content.ReadFromJsonAsync<JsonElement>();
+
+        var finalOrder = orders.EnumerateArray()
+            .First(o => o.GetProperty("orderId").GetInt32() == orderId);
+
+        var status = finalOrder.GetProperty("status").GetString();
+
         Assert.That(status, Is.EqualTo("completed"));
     }
+
+
+    [Test]
+    public async Task GetOrderById_AsDifferentUser_ShouldReturn404()
+    {
+        var customerToken = await LoginAsync(
+            "test@example.com", "Password123!");
+
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", customerToken);
+
+        var createResponse = await _client.PostAsJsonAsync(
+            "/api/orders",
+            new CreateOrderDto
+            {
+                DeliveryAddress = "Київ, Хрещатик 10",
+                RecipientName = "Тест Юзер",
+                RecipientPhone = "+380501111111",
+                Items = new List<CreateOrderItemDto>
+                {
+                new() { ProductId = 1, Quantity = 1 }
+                }
+            });
+
+        Assert.That(createResponse.StatusCode,
+            Is.EqualTo(HttpStatusCode.Created));
+
+        var created = await createResponse.Content
+            .ReadFromJsonAsync<JsonElement>();
+
+        var orderId = created.GetProperty("orderId").GetInt32();
+
+        // Перемикаємося на інший обліковий запис — адміністратора.
+        var adminToken = await LoginAsync(
+            "admin@example.com", "Admin123!");
+
+        _client.DefaultRequestHeaders.Authorization =
+            new AuthenticationHeaderValue("Bearer", adminToken);
+
+        // Користувацький маршрут не повинен розкривати чуже замовлення.
+        var response = await _client.GetAsync($"/api/orders/{orderId}");
+
+        Assert.That(response.StatusCode,
+            Is.EqualTo(HttpStatusCode.NotFound));
+    }
+
 
     [Test]
     public async Task E2E_CreateDiscount_ThenCreateOrder_ShouldSucceed()

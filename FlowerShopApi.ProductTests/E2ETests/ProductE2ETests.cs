@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using Xunit;
+using FlowerShopApi.Tests;
 
 namespace FlowerShopApi.Tests.E2ETests
 {
@@ -50,7 +51,7 @@ namespace FlowerShopApi.Tests.E2ETests
                 .Setup(r => r.GetByIdAsync(5))
                 .ReturnsAsync(products[0]);
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");
@@ -146,7 +147,7 @@ namespace FlowerShopApi.Tests.E2ETests
                 .Setup(r => r.GetByIdAsync(10))
                 .ReturnsAsync(products[0]);
 
-            using var factory = new WebApplicationFactory<Program>()
+            using var factory = new ProductTestFactory()
                 .WithWebHostBuilder(builder =>
                 {
                     builder.UseEnvironment("Testing");

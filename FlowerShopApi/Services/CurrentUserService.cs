@@ -19,12 +19,13 @@ namespace FlowerShopApi.Services
                 .FindFirst(ClaimTypes.NameIdentifier)?
                 .Value;
 
-            if (string.IsNullOrWhiteSpace(userIdClaim))
+            if (!int.TryParse(userIdClaim, out var userId) || userId <= 0)
             {
-                throw new UnauthorizedException("Користувач не авторизований");
+                throw new UnauthorizedException(
+                    "Некоректний або відсутній ідентифікатор користувача");
             }
 
-            return int.Parse(userIdClaim);
+            return userId;
         }
     }
 }
