@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - develop
+       - deployment/module-4
     paths:
       - 'FlowerShopApi/**'
       - 'frontend/**'
