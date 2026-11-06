@@ -5,6 +5,7 @@ namespace FlowerShopApi.Repositories
     public interface IProductRepository
     {
         Task<List<Product>> GetAllAsync();
+        Task<List<Product>> GetOutOfStockAsync();
         Task<Product?> GetByIdAsync(int id);
         Task<List<Product>> GetByCategoryIdAsync(int categoryId);
         Task<bool> CategoryExistsAsync(int categoryId);
