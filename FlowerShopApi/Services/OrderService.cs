@@ -53,6 +53,7 @@ namespace FlowerShopApi.Services
 
             foreach (var itemDto in dto.Items)
             {
+                
                 var product = await _orderRepository.GetProductByIdAsync(itemDto.ProductId);
                 if (product == null)
                     throw new NotFoundException($"Товар з id {itemDto.ProductId} не знайдено");
@@ -100,6 +101,18 @@ namespace FlowerShopApi.Services
         {
             var order = await _orderRepository.GetByIdAsync(id);
             if (order == null)
+                throw new NotFoundException("Замовлення не знайдено");
+
+            return order;
+        }
+
+        public async Task<Order> GetMyOrderByIdAsync(int id)
+        {
+            var userId = GetCurrentUserId();
+
+            var order = await _orderRepository.GetByIdAsync(id);
+
+            if (order == null || order.UserId != userId)
                 throw new NotFoundException("Замовлення не знайдено");
 
             return order;

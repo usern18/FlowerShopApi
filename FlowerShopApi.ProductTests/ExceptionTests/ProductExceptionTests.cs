@@ -6,6 +6,7 @@ using FlowerShopApi.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FlowerShopApi.Tests.ExceptionTests
 {
@@ -19,7 +20,8 @@ namespace FlowerShopApi.Tests.ExceptionTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act & Assert - очікуємо помилку
@@ -42,7 +44,8 @@ namespace FlowerShopApi.Tests.ExceptionTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act & Assert - перевіряємо виняток
@@ -84,7 +87,8 @@ namespace FlowerShopApi.Tests.ExceptionTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act & Assert - очікуємо BadRequestException
@@ -120,7 +124,8 @@ namespace FlowerShopApi.Tests.ExceptionTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act & Assert - очікуємо NotFoundException

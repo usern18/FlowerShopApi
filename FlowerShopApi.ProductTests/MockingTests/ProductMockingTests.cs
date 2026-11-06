@@ -5,6 +5,7 @@ using FlowerShopApi.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FlowerShopApi.Tests.MockingTests
 {
@@ -29,7 +30,8 @@ namespace FlowerShopApi.Tests.MockingTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - викликаємо сервіс
@@ -62,7 +64,8 @@ namespace FlowerShopApi.Tests.MockingTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - видаляємо товар
@@ -107,7 +110,8 @@ namespace FlowerShopApi.Tests.MockingTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - створюємо товар
@@ -175,7 +179,8 @@ namespace FlowerShopApi.Tests.MockingTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - оновлюємо товар

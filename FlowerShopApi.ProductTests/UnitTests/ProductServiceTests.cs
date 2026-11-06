@@ -6,6 +6,7 @@ using FlowerShopApi.Services;
 using Microsoft.Extensions.Logging.Abstractions;
 using Moq;
 using Xunit;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FlowerShopApi.Tests.UnitTests
 {
@@ -41,7 +42,8 @@ namespace FlowerShopApi.Tests.UnitTests
             // Створюємо справжній сервіс
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - викликаємо метод
@@ -72,7 +74,8 @@ namespace FlowerShopApi.Tests.UnitTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - шукаємо товар за ID
@@ -118,7 +121,8 @@ namespace FlowerShopApi.Tests.UnitTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - отримуємо товари категорії 1
@@ -153,7 +157,8 @@ namespace FlowerShopApi.Tests.UnitTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - створюємо товар
@@ -225,7 +230,8 @@ namespace FlowerShopApi.Tests.UnitTests
 
             var service = new ProductService(
                 mockRepository.Object,
-                NullLogger<ProductService>.Instance
+                NullLogger<ProductService>.Instance,
+                new MemoryCache(new MemoryCacheOptions())
             );
 
             // Act - оновлюємо товар

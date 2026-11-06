@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rosemary Shop — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body data-page="admin">
+  <header class="site-header compact">
+    <div class="top-brand"><a href="index.html" class="brand">ROSEMARY SHOP</a></div>
+    <div class="nav-row">
+      <nav class="main-nav">
+                <a href="products.html?category=Букети">БУКЕТИ</a>
+                <a href="products.html?category=Квіти">КВІТИ</a>
+                <a href="products.html?category=Подарункові набори">ПОДАРУНКОВІ НАБОРИ</a>
+                <a href="faq.html">FAQ</a>
+            </nav>
+      <div class="header-actions">
+                <button class="ghost-btn" type="button">УКР</button>
+
+                <button class="ghost-btn" id="currencyBtn" type="button">UAH</button>
+
+                <div class="currency-menu hidden" id="currencyMenu">
+                    <button type="button">USD</button>
+                    <button type="button">EUR</button>
+                    <button type="button" class="active">UAH</button>
+                    <button type="button">PLN</button>
+                </div>
+
+                <button class="icon-btn profile-avatar-btn" id="openProfileBtn" type="button">
+                    <img src="images/profile.png" alt="Профіль" class="profile-avatar-img">
+                </button>
+                <button class="icon-btn cart-btn" id="openCartBtn" type="button">
+                    <img src="images/cart.png" alt="Кошик" class="cart-avatar-img">
+                    <span id="cartHeaderTotal">0 UAH</span>
+                </button>
+            </div>
+    </div>
+  </header>
+
+  <main class="admin-page container">
+    <section class="catalog-header admin-header">
+      <h1>Категорії</h1>
+      <p>Окрема сторінка для створення та редагування категорій товарів.</p>
+    </section>
+    
+    <nav class="admin-menu-grid">
+      <a class="admin-menu-card" href="admin-products.html"><strong>Товари</strong><span>Додавання, редагування, фото</span></a>
+      <a class="admin-menu-card" href="admin-categories.html"><strong>Категорії</strong><span>Додавання і редагування категорій</span></a>
+      <a class="admin-menu-card" href="admin-discounts.html"><strong>Знижки</strong><span>Відсоток знижки на товар</span></a>
+      <div class="admin-menu-card" style="opacity:.55;cursor:not-allowed" title="Промокоди не реалізовані у поточному API"><strong>Промокоди</strong><span>Наразі недоступно</span></div>
+    </nav>
+
+    <section class="admin-form-page-grid">
+      <div class="admin-card">
+        <h2 id="categoryFormTitle">Додати категорію</h2>
+        <form id="categoryForm" class="auth-form">
+          <input type="hidden" id="editCategoryId" />
+          <input type="text" id="categoryName" placeholder="Назва категорії" required />
+          <textarea id="categoryDescription" class="admin-textarea" placeholder="Опис категорії"></textarea>
+          <div class="form-row"><button class="primary-btn" type="submit">ЗБЕРЕГТИ</button><button class="product-btn" id="resetCategoryForm" type="button">СКАСУВАТИ</button></div>
+        </form>
+</div>
+      <div class="admin-card admin-list-card">
+        <h2>Список категорій</h2>
+        <div class="admin-controls-grid">
+          <input type="search" id="adminCategoriesSearch" data-admin-filter="categories" placeholder="Пошук: назва, опис, ID" />
+          <select id="adminCategoriesSort" data-admin-filter="categories" class="admin-select">
+            <option value="idDesc">Спочатку нові</option>
+            <option value="idAsc">Спочатку старі</option>
+            <option value="nameAsc">Назва А-Я</option>
+            <option value="nameDesc">Назва Я-А</option>
+          </select>
+          <select id="adminCategoriesUsageFilter" data-admin-filter="categories" class="admin-select">
+            <option value="all">Усі категорії</option>
+            <option value="used">Є товари</option>
+            <option value="empty">Без товарів</option>
+          </select>
+          <select id="adminCategoriesPageSize" data-admin-filter="categories" class="admin-select">
+            <option value="5">5 на сторінці</option>
+            <option value="10">10 на сторінці</option>
+            <option value="20">20 на сторінці</option>
+          </select>
+        </div>
+        <div class="admin-list-summary" id="adminCategoriesSummary"></div>
+        <div id="adminCategoriesList" class="admin-products-list"></div>
+        <div id="adminCategoriesPagination" class="admin-pagination"></div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div><div class="footer-brand">ROSEMARY SHOP</div><p>© 2026, курсовий проєкт</p></div>
+    <div><p>E-mail: rosemaryshop@example.com</p><p>Telegram: @rosemaryshop</p></div>
+    <div class="footer-note">Панель адміністратора для керування магазином.</div>
+  </footer>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
