@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rosemary Shop — Admin</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body data-page="admin">
+  <header class="site-header compact">
+    <div class="top-brand"><a href="index.html" class="brand">ROSEMARY SHOP</a></div>
+    <div class="nav-row">
+      <nav class="main-nav">
+                <a href="products.html?category=Букети">БУКЕТИ</a>
+                <a href="products.html?category=Квіти">КВІТИ</a>
+                <a href="products.html?category=Подарункові набори">ПОДАРУНКОВІ НАБОРИ</a>
+                <a href="faq.html">FAQ</a>
+            </nav>
+      <div class="header-actions">
+                <button class="ghost-btn" type="button">УКР</button>
+
+                <button class="ghost-btn" id="currencyBtn" type="button">UAH</button>
+
+                <div class="currency-menu hidden" id="currencyMenu">
+                    <button type="button">USD</button>
+                    <button type="button">EUR</button>
+                    <button type="button" class="active">UAH</button>
+                    <button type="button">PLN</button>
+                </div>
+
+                <button class="icon-btn profile-avatar-btn" id="openProfileBtn" type="button">
+                    <img src="images/profile.png" alt="Профіль" class="profile-avatar-img">
+                </button>
+                <button class="icon-btn cart-btn" id="openCartBtn" type="button">
+                    <img src="images/cart.png" alt="Кошик" class="cart-avatar-img">
+                    <span id="cartHeaderTotal">0 UAH</span>
+                </button>
+            </div>
+    </div>
+  </header>
+
+  <main class="admin-page container">
+    <section class="catalog-header admin-header">
+      <h1>Адмін панель</h1>
+      <p>Окремі сторінки для товарів, категорій, знижок і промокодів.</p>
+    </section>
+    
+    <nav class="admin-menu-grid">
+      <a class="admin-menu-card" href="admin-products.html"><strong>Товари</strong><span>Додавання, редагування, фото</span></a>
+      <a class="admin-menu-card" href="admin-categories.html"><strong>Категорії</strong><span>Додавання і редагування категорій</span></a>
+      <a class="admin-menu-card" href="admin-discounts.html"><strong>Знижки</strong><span>Відсоток знижки на товар</span></a>
+      <div class="admin-menu-card" style="opacity:.55;cursor:not-allowed" title="Промокоди не реалізовані у поточному API"><strong>Промокоди</strong><span>Наразі недоступно</span></div>
+    </nav>
+
+    <section class="admin-grid">
+      <div class="admin-card">
+        <h2>Швидке керування</h2>
+        <p class="muted">Обери потрібний розділ зверху. Так адмінка не виглядає перевантаженою і кожна дія має свою сторінку.</p>
+      </div>
+      <div class="admin-card">
+        <div class="section-head admin-list-head">
+          <h2>Товари</h2>
+          <button class="product-btn" id="refreshAdminProducts" type="button">ОНОВИТИ</button>
+        </div>
+        <div id="adminProductsList" class="admin-products-list"></div>
+      </div>
+    </section>
+</main>
+
+  <footer class="site-footer">
+    <div><div class="footer-brand">ROSEMARY SHOP</div><p>© 2026, курсовий проєкт</p></div>
+    <div><p>E-mail: rosemaryshop@example.com</p><p>Telegram: @rosemaryshop</p></div>
+    <div class="footer-note">Панель адміністратора для керування магазином.</div>
+  </footer>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

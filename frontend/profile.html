@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rosemary Shop — Профіль</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body data-page="profile">
+  <header class="site-header compact">
+    <div class="top-brand">
+      <a href="index.html" class="brand">ROSEMARY SHOP</a>
+    </div>
+
+    <div class="nav-row">
+      <nav class="main-nav">
+                <a href="products.html?category=Букети">БУКЕТИ</a>
+                <a href="products.html?category=Квіти">КВІТИ</a>
+                <a href="products.html?category=Подарункові набори">ПОДАРУНКОВІ НАБОРИ</a>
+                <a href="faq.html">FAQ</a>
+            </nav>
+
+      <div class="header-actions">
+                <button class="ghost-btn" type="button">УКР</button>
+
+                <button class="ghost-btn" id="currencyBtn" type="button">UAH</button>
+
+                <div class="currency-menu hidden" id="currencyMenu">
+                    <button type="button">USD</button>
+                    <button type="button">EUR</button>
+                    <button type="button" class="active">UAH</button>
+                    <button type="button">PLN</button>
+                </div>
+
+                <button class="icon-btn profile-avatar-btn" id="openProfileBtn" type="button">
+                    <img src="images/profile.png" alt="Профіль" class="profile-avatar-img">
+                </button>
+                <button class="icon-btn cart-btn" id="openCartBtn" type="button">
+                    <img src="images/cart.png" alt="Кошик" class="cart-avatar-img">
+                    <span id="cartHeaderTotal">0 UAH</span>
+                </button>
+            </div>
+    </div>
+  </header>
+
+  <main class="profile-page container">
+    <section class="catalog-header admin-header">
+      <h1>Мій акаунт</h1>
+      <p>Особисті дані, адреса доставки, пароль і історія замовлень.</p>
+    </section>
+
+    <section class="profile-layout-page">
+      <div class="profile-sidebar-page">
+        <button class="profile-side-link active" type="button" data-profile-tab="info">Особисті дані</button>
+        <button class="profile-side-link" type="button" data-profile-tab="orders">Мої замовлення</button>
+        <button class="profile-side-link" type="button" data-profile-tab="security">Безпека</button>
+        <button class="profile-side-link hidden" type="button" id="adminPanelLinkBtn">Адмін панель</button>
+        <button class="primary-btn" id="logoutBtnPage" type="button">ВИЙТИ З АКАУНТУ</button>
+      </div>
+
+      <div class="profile-main-page">
+        <section class="profile-tab-section" id="profileTabInfo">
+          <div class="profile-block-page">
+            <h2>Особисті дані</h2>
+            <form id="profileFormPage" class="profile-grid-page">
+              <div class="profile-field-page">
+                <label>Ім'я</label>
+                <input id="profileFirstNamePage" />
+              </div>
+              <div class="profile-field-page">
+                <label>Прізвище</label>
+                <input id="profileLastNamePage" />
+              </div>
+              <div class="profile-field-page">
+                <label>По батькові</label>
+                <input id="profileMiddleNamePage" />
+              </div>
+              <div class="profile-field-page">
+                <label>Телефон</label>
+                <input id="profilePhonePage" />
+              </div>
+              <div class="profile-field-page full-width">
+                <label>Email</label>
+                <input id="profileEmailPage" readonly />
+              </div>
+
+              <div class="profile-field-page">
+                <label>Країна</label>
+                <input id="profileCountryPage" value="Україна" />
+              </div>
+              <div class="profile-field-page">
+                <label>Місто</label>
+                <input id="profileCityPage" />
+              </div>
+              <div class="profile-field-page">
+                <label>Край / область / регіон</label>
+                <input id="profileRegionPage" />
+              </div>
+              <div class="profile-field-page">
+                <label>Поштовий індекс</label>
+                <input id="profilePostalPage" />
+              </div>
+              <div class="profile-field-page full-width">
+                <label>Вулиця, будинок, квартира</label>
+                <input id="profileStreetPage" />
+              </div>
+
+              <div class="panel-actions">
+                <button class="primary-btn" type="submit">ЗБЕРЕГТИ ПРОФІЛЬ</button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="profile-tab-section hidden" id="profileTabOrders">
+          <div class="profile-block-page">
+            <h2>Мої замовлення</h2>
+            <div id="profileOrdersListPage"></div>
+          </div>
+        </section>
+
+        <section class="profile-tab-section hidden" id="profileTabSecurity">
+          <div class="profile-block-page">
+            <h2>Безпека</h2>
+            <form id="changePasswordFormPage" class="auth-form">
+              <input type="password" id="currentPasswordPage" placeholder="Поточний пароль" required />
+              <input type="password" id="newPasswordPage" placeholder="Новий пароль" required />
+              <button class="primary-btn" type="submit">ЗМІНИТИ ПАРОЛЬ</button>
+            </form>
+
+            <div class="profile-google-login-block">
+              <h3>Авторизація через Google</h3>
+              <p class="muted">Google-вхід доступний навіть якщо ви вже авторизовані.</p>
+              <div id="googleProfileButtonWrap"></div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div>
+      <div class="footer-brand">ROSEMARY SHOP</div>
+      <p>© 2026, курсовий проєкт</p>
+    </div>
+
+    <div>
+      <p>E-mail: rosemaryshop@example.com</p>
+      <p>Telegram: @rosemaryshop</p>
+    </div>
+
+    <div class="footer-note">
+      Персональний кабінет користувача.
+    </div>
+  </footer>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>

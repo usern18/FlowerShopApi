@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="uk">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Rosemary Shop</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Great+Vibes&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+
+<body data-page="home">
+    <header class="site-header">
+        <div class="top-brand">
+            <a href="index.html" class="brand">ROSEMARY SHOP</a>
+        </div>
+
+        <div class="nav-row">
+            <nav class="main-nav">
+                <a href="products.html?category=Букети">БУКЕТИ</a>
+                <a href="products.html?category=Квіти">КВІТИ</a>
+                <a href="products.html?category=Подарункові набори">ПОДАРУНКОВІ НАБОРИ</a>
+                <a href="faq.html">FAQ</a>
+            </nav>
+
+            <div class="header-actions">
+                <button class="ghost-btn" type="button">УКР</button>
+
+                <button class="ghost-btn" id="currencyBtn" type="button">UAH</button>
+
+                <div class="currency-menu hidden" id="currencyMenu">
+                    <button type="button">USD</button>
+                    <button type="button">EUR</button>
+                    <button type="button" class="active">UAH</button>
+                    <button type="button">PLN</button>
+                </div>
+
+                <button class="icon-btn profile-avatar-btn" id="openProfileBtn" type="button">
+                    <img src="images/profile.png" alt="Профіль" class="profile-avatar-img">
+                </button>
+                <button class="icon-btn cart-btn" id="openCartBtn" type="button">
+                    <img src="images/cart.png" alt="Кошик" class="cart-avatar-img">
+                    <span id="cartHeaderTotal">0 UAH</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section class="hero">
+            <div class="hero-overlay"></div>
+            <div class="hero-content">
+                <h1>Є тільки ніжність, аромат і гарні букети.</h1>
+                <p class="hero-subtitle">Квіти для особливих моментів, подарунків і щирих емоцій.</p>
+                <div class="hero-buttons">
+                    <a href="products.html" class="primary-btn">ДИВИТИСЬ ТОВАРИ</a>
+                    <a href="faq.html" class="secondary-btn">ПРО МАГАЗИН</a>
+                </div>
+            </div>
+        </section>
+
+        <section class="quote-strip">
+            <p>Є тільки <span>свіжі квіти</span> та красиві композиції. Все інше — деталі.</p>
+        </section>
+
+        <section class="categories-preview container">
+            <div class="section-head">
+                <h2>Популярні категорії</h2>
+                <a href="products.html">Усі товари</a>
+            </div>
+
+            <div class="category-grid">
+                <a class="category-card" href="products.html?category=Букети">
+                    <div class="category-image bouquet-bg"></div>
+                    <div class="category-title">Букети</div>
+                </a>
+
+                <a class="category-card" href="products.html?category=Квіти">
+                    <div class="category-image flowers-bg"></div>
+                    <div class="category-title">Квіти</div>
+                </a>
+
+                <a class="category-card" href="products.html?category=Подарункові набори">
+                    <div class="category-image gifts-bg"></div>
+                    <div class="category-title">Подарункові набори</div>
+                </a>
+            </div>
+        </section>
+
+        <section class="featured container">
+            <div class="section-head">
+                <h2>Хіти магазину</h2>
+                <a href="products.html">Перейти в каталог</a>
+            </div>
+
+            <div class="product-grid" id="featuredProducts">
+                <article class="product-card skeleton-card"></article>
+                <article class="product-card skeleton-card"></article>
+                <article class="product-card skeleton-card"></article>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <div>
+            <div class="footer-brand">ROSEMARY SHOP</div>
+            <p>© 2026, курсовий проєкт</p>
+        </div>
+
+        <div>
+            <p>E-mail: rosemaryshop@example.com</p>
+            <p>Telegram: @rosemaryshop</p>
+        </div>
+
+        <div class="footer-note">
+            Клієнтська частина інтегрована з FlowerShopApi.
+        </div>
+    </footer>
+
+    <script type="module" src="js/main.js"></script>
+</body>
+
+</html>
