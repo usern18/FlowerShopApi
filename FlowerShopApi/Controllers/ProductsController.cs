@@ -9,6 +9,7 @@ namespace FlowerShopApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class ProductsController : ControllerBase
     {
         private readonly ProductService _productService;
