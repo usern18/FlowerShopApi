@@ -53,6 +53,20 @@ namespace FlowerShopApi.Controllers
         }
 
         /// <summary>
+        /// Отримує товари за категорією.
+        /// </summary>
+        /// <response code="200">Товари категорії отримано.</response>
+        /// <response code="404">Категорія не знайдена.</response>
+        [HttpGet("category/{categoryId:int}")]
+        public async Task<IActionResult> GetByCategory(int categoryId)
+        {
+            var products =
+                await _productService.GetByCategoryIdAsync(categoryId);
+
+            return Ok(products);
+        }
+
+        /// <summary>
         /// Створює новий товар у каталозі магазину.
         /// </summary>
         /// <param name="dto">

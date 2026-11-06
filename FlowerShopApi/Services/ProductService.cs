@@ -39,6 +39,21 @@ namespace FlowerShopApi.Services
             return product;
         }
 
+        public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
+        {
+            _logger.LogInformation(
+                "Отримання товарів категорії {CategoryId}",
+                categoryId);
+
+            var categoryExists =
+                await _productRepository.CategoryExistsAsync(categoryId);
+
+            if (!categoryExists)
+                throw new NotFoundException("Категорія не існує");
+
+            return await _productRepository.GetByCategoryIdAsync(categoryId);
+        }
+
         public async Task<Product> CreateAsync(CreateProductDto dto)
         {
             _logger.LogInformation("Створення товару {Name}", dto.Name);
