@@ -367,3 +367,7 @@ FodyWeavers.xsd
 
 # Generated coverage reports
 CoverageReport/
+
+# .NET profiling
+*.nettrace
+*.etlx
