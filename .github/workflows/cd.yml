@@ -6,14 +6,7 @@ on:
     branches:
       - develop
        - deployment/module-4
-    paths:
-      - 'FlowerShopApi/**'
-      - 'frontend/**'
-      - 'FlowerShopApi.Tests/**'
-      - 'FlowerShopApi.ProductTests/**'
-      - 'FlowerShopApi.sln'
-      - '.github/workflows/cd.yml'
-
+    
   workflow_dispatch:
 
 permissions:
