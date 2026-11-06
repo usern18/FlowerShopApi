@@ -2,6 +2,7 @@ using FlowerShopApi.DTOs.Products;
 using FlowerShopApi.Exceptions;
 using FlowerShopApi.Models;
 using FlowerShopApi.Repositories;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FlowerShopApi.Services
 {
@@ -9,17 +10,37 @@ namespace FlowerShopApi.Services
     {
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductService> _logger;
+        private readonly IMemoryCache _cache;
 
-        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger)
+        private const string ProductsCacheKey = "products:all";
+
+        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger, IMemoryCache cache)
         {
             _productRepository = productRepository;
             _logger = logger;
+            _cache = cache;
         }
 
         public async Task<List<Product>> GetAllAsync()
         {
-            _logger.LogInformation("Отримання всіх товарів");
-            return await _productRepository.GetAllAsync();
+            if (_cache.TryGetValue(ProductsCacheKey, out List<Product>? cachedProducts)
+      && cachedProducts != null)
+            {
+                _logger.LogInformation("CACHE HIT: товари отримано з кешу");
+                return cachedProducts;
+            }
+
+            _logger.LogInformation("CACHE MISS: отримання товарів із БД");
+
+            var products = await _productRepository.GetAllAsync();
+
+            _cache.Set(
+                ProductsCacheKey,
+                products,
+                TimeSpan.FromSeconds(30)
+            );
+
+            return products;
         }
 
         public async Task<List<Product>> GetOutOfStockAsync()
@@ -80,6 +101,8 @@ namespace FlowerShopApi.Services
             await _productRepository.AddAsync(product);
             await _productRepository.SaveChangesAsync();
 
+            _cache.Remove(ProductsCacheKey);
+
             return product;
         }
 
@@ -104,6 +127,7 @@ namespace FlowerShopApi.Services
             product.UpdatedAt = DateTime.UtcNow;
 
             await _productRepository.SaveChangesAsync();
+            _cache.Remove(ProductsCacheKey);
 
             return "Товар оновлено";
         }
@@ -118,6 +142,7 @@ namespace FlowerShopApi.Services
 
             _productRepository.Remove(product);
             await _productRepository.SaveChangesAsync();
+            _cache.Remove(ProductsCacheKey);
 
             return "Товар видалено";
         }

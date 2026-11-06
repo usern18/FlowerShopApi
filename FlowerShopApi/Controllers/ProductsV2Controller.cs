@@ -3,10 +3,13 @@ using FlowerShopApi.DTOs.Products;
 using FlowerShopApi.Models;
 using FlowerShopApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.RateLimiting;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace FlowerShopApi.Controllers
 {
     [ApiController]
+    [EnableRateLimiting("products-v2")]
     [Route("api/v2/products")]
     public class ProductsV2Controller : ControllerBase
     {
@@ -20,6 +23,7 @@ namespace FlowerShopApi.Controllers
         /// <summary>
         /// Отримує всі товари у форматі API v2.
         /// </summary>
+        /// [EnableRateLimiting("products-v2")]
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {

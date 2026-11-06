@@ -371,3 +371,7 @@ CoverageReport/
 # .NET profiling
 *.nettrace
 *.etlx
+
+.env
+.env.*
+!.env.example
