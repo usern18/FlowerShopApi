@@ -1,3 +1,5 @@
+
+using System.ComponentModel.DataAnnotations;
 using FlowerShopApi.DTOs.Products;
 using FlowerShopApi.Exceptions;
 using FlowerShopApi.Models;
@@ -10,7 +12,9 @@ namespace FlowerShopApi.Services
         private readonly IProductRepository _productRepository;
         private readonly ILogger<ProductService> _logger;
 
-        public ProductService(IProductRepository productRepository, ILogger<ProductService> logger)
+        public ProductService(
+            IProductRepository productRepository,
+            ILogger<ProductService> logger)
         {
             _productRepository = productRepository;
             _logger = logger;
@@ -41,9 +45,13 @@ namespace FlowerShopApi.Services
 
         public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
         {
-            _logger.LogInformation("Отримання товарів за id категорії {CategoryId}", categoryId);
+            _logger.LogInformation(
+                "Отримання товарів за id категорії {CategoryId}",
+                categoryId);
 
-            var categoryExists = await _productRepository.CategoryExistsAsync(categoryId);
+            var categoryExists =
+                await _productRepository.CategoryExistsAsync(categoryId);
+
             if (!categoryExists)
                 throw new NotFoundException("Категорія не існує");
 
@@ -54,18 +62,24 @@ namespace FlowerShopApi.Services
         {
             _logger.LogInformation("Створення товару {Name}", dto.Name);
 
-            var categoryExists = await _productRepository.CategoryExistsAsync(dto.CategoryId);
+            ValidateProductDto(dto);
+
+            int categoryId = dto.CategoryId!.Value;
+
+            var categoryExists =
+                await _productRepository.CategoryExistsAsync(categoryId);
+
             if (!categoryExists)
                 throw new BadRequestException("Категорія не існує");
 
             var product = new Product
             {
-                CategoryId = dto.CategoryId,
+                CategoryId = categoryId,
                 Name = dto.Name,
                 Description = dto.Description,
-                Price = dto.Price,
-                StockQuantity = dto.StockQuantity,
-                IsAvailable = dto.IsAvailable,
+                Price = dto.Price!.Value,
+                StockQuantity = dto.StockQuantity!.Value,
+                IsAvailable = dto.IsAvailable ?? true,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
@@ -80,20 +94,26 @@ namespace FlowerShopApi.Services
         {
             _logger.LogInformation("Оновлення товару з id {Id}", id);
 
+            ValidateProductDto(dto);
+
             var product = await _productRepository.GetByIdAsync(id);
             if (product == null)
                 throw new NotFoundException("Товар не знайдено");
 
-            var categoryExists = await _productRepository.CategoryExistsAsync(dto.CategoryId);
+            int categoryId = dto.CategoryId!.Value;
+
+            var categoryExists =
+                await _productRepository.CategoryExistsAsync(categoryId);
+
             if (!categoryExists)
                 throw new BadRequestException("Категорія не існує");
 
-            product.CategoryId = dto.CategoryId;
+            product.CategoryId = categoryId;
             product.Name = dto.Name;
             product.Description = dto.Description;
-            product.Price = dto.Price;
-            product.StockQuantity = dto.StockQuantity;
-            product.IsAvailable = dto.IsAvailable;
+            product.Price = dto.Price!.Value;
+            product.StockQuantity = dto.StockQuantity!.Value;
+            product.IsAvailable = dto.IsAvailable ?? true;
             product.UpdatedAt = DateTime.UtcNow;
 
             await _productRepository.SaveChangesAsync();
@@ -113,6 +133,30 @@ namespace FlowerShopApi.Services
             await _productRepository.SaveChangesAsync();
 
             return "Товар видалено";
+        }
+
+        private static void ValidateProductDto(CreateProductDto dto)
+        {
+            if (dto == null)
+                throw new BadRequestException("Дані товару не передано");
+
+            var validationResults = new List<ValidationResult>();
+            var validationContext = new ValidationContext(dto);
+
+            bool isValid = Validator.TryValidateObject(
+                dto,
+                validationContext,
+                validationResults,
+                validateAllProperties: true);
+
+            if (!isValid)
+            {
+                var errors = string.Join(
+                    "; ",
+                    validationResults.Select(r => r.ErrorMessage));
+
+                throw new BadRequestException(errors);
+            }
         }
     }
 }

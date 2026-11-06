@@ -1,3 +1,4 @@
+
 using FlowerShopApi.Data;
 using FlowerShopApi.DTOs.FeaturedProducts;
 using FlowerShopApi.Exceptions;
@@ -22,15 +23,30 @@ namespace FlowerShopApi.Services
                 .ToListAsync();
         }
 
-        public async Task<FeaturedProduct> CreateAsync(CreateFeaturedProductDto dto)
+        public async Task<FeaturedProduct> CreateAsync(
+            CreateFeaturedProductDto dto)
         {
-            var productExists = await _context.Products.AnyAsync(p => p.ProductId == dto.ProductId);
+            if (dto == null ||
+                !dto.ProductId.HasValue ||
+                dto.ProductId.Value <= 0)
+            {
+                throw new BadRequestException(
+                    "Необхідно вказати коректний ProductId");
+            }
+
+            int productId = dto.ProductId.Value;
+
+            var productExists = await _context.Products
+                .AnyAsync(p => p.ProductId == productId);
+
             if (!productExists)
+            {
                 throw new BadRequestException("Товар не існує");
+            }
 
             var featured = new FeaturedProduct
             {
-                ProductId = dto.ProductId
+                ProductId = productId
             };
 
             _context.FeaturedProducts.Add(featured);
@@ -41,9 +57,14 @@ namespace FlowerShopApi.Services
 
         public async Task<string> DeleteAsync(int id)
         {
-            var featured = await _context.FeaturedProducts.FindAsync(id);
+            var featured = await _context.FeaturedProducts
+                .FindAsync(id);
+
             if (featured == null)
-                throw new NotFoundException("Featured товар не знайдено");
+            {
+                throw new NotFoundException(
+                    "Featured товар не знайдено");
+            }
 
             _context.FeaturedProducts.Remove(featured);
             await _context.SaveChangesAsync();

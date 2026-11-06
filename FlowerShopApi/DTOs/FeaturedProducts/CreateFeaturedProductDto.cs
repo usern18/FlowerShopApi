@@ -1,3 +1,4 @@
+
 using System.ComponentModel.DataAnnotations;
 
 namespace FlowerShopApi.DTOs.FeaturedProducts
@@ -5,6 +6,7 @@ namespace FlowerShopApi.DTOs.FeaturedProducts
     public class CreateFeaturedProductDto
     {
         [Required]
-        public int ProductId { get; set; }
+        [Range(1, int.MaxValue)]
+        public int? ProductId { get; set; }
     }
 }
