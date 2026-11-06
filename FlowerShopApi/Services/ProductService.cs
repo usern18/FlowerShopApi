@@ -46,8 +46,8 @@ namespace FlowerShopApi.Services
         public async Task<List<Product>> GetByCategoryIdAsync(int categoryId)
         {
             _logger.LogInformation(
-                "Отримання товарів за id категорії {CategoryId}",
-                categoryId);
+        "Отримання товарів за id категорії {CategoryId}",
+        categoryId);
 
             var categoryExists =
                 await _productRepository.CategoryExistsAsync(categoryId);

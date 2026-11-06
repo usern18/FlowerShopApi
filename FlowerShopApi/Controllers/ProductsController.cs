@@ -1,3 +1,4 @@
+
 using FlowerShopApi.DTOs.Products;
 using FlowerShopApi.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -16,6 +17,11 @@ namespace FlowerShopApi.Controllers
             _productService = productService;
         }
 
+        /// <summary>
+        /// Отримує список усіх товарів магазину.
+        /// </summary>
+        /// <returns>Список товарів.</returns>
+        /// <response code="200">Список товарів успішно отримано.</response>
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
@@ -23,6 +29,11 @@ namespace FlowerShopApi.Controllers
             return Ok(products);
         }
 
+        /// <summary>
+        /// Отримує товари, яких немає в наявності.
+        /// </summary>
+        /// <returns>Список товарів, відсутніх на складі.</returns>
+        /// <response code="200">Список товарів успішно отримано.</response>
         [HttpGet("out-of-stock")]
         public async Task<IActionResult> GetOutOfStock()
         {
@@ -30,6 +41,13 @@ namespace FlowerShopApi.Controllers
             return Ok(products);
         }
 
+        /// <summary>
+        /// Отримує товар за його унікальним ідентифікатором.
+        /// </summary>
+        /// <param name="id">Ідентифікатор товару.</param>
+        /// <returns>Дані знайденого товару.</returns>
+        /// <response code="200">Товар успішно знайдено.</response>
+        /// <response code="404">Товар із таким ідентифікатором не знайдено.</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
@@ -37,30 +55,77 @@ namespace FlowerShopApi.Controllers
             return Ok(product);
         }
 
+        /// <summary>
+        /// Отримує товари за категорією.
+        /// </summary>
+        /// <param name="categoryId">Ідентифікатор категорії.</param>
+        /// <response code="200">Товари категорії отримано.</response>
+        /// <response code="404">Категорія не знайдена.</response>
         [HttpGet("category/{categoryId:int}")]
         public async Task<IActionResult> GetByCategory(int categoryId)
         {
-            var products = await _productService.GetByCategoryIdAsync(categoryId);
+            var products =
+                await _productService.GetByCategoryIdAsync(categoryId);
 
             return Ok(products);
         }
 
+        /// <summary>
+        /// Створює новий товар у каталозі магазину.
+        /// </summary>
+        /// <param name="dto">
+        /// Дані нового товару: категорія, назва, опис, ціна,
+        /// кількість на складі та доступність.
+        /// </param>
+        /// <returns>Створений товар.</returns>
+        /// <response code="201">Товар успішно створено.</response>
+        /// <response code="400">
+        /// Передані некоректні дані або вказана категорія не існує.
+        /// </response>
+        /// <response code="401">Користувач не авторизований.</response>
+        /// <response code="403">Користувач не має прав адміністратора.</response>
         [Authorize(Roles = "admin")]
         [HttpPost]
         public async Task<IActionResult> Create(CreateProductDto dto)
         {
             var product = await _productService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = product.ProductId }, product);
+
+            return CreatedAtAction(
+                nameof(GetById),
+                new { id = product.ProductId },
+                product);
         }
 
+        /// <summary>
+        /// Оновлює дані існуючого товару.
+        /// </summary>
+        /// <param name="id">Ідентифікатор товару.</param>
+        /// <param name="dto">Нові дані товару.</param>
+        /// <returns>Повідомлення про результат оновлення.</returns>
+        /// <response code="200">Товар успішно оновлено.</response>
+        /// <response code="400">Вказана категорія не існує або дані некоректні.</response>
+        /// <response code="401">Користувач не авторизований.</response>
+        /// <response code="403">Користувач не має прав адміністратора.</response>
+        /// <response code="404">Товар не знайдено.</response>
         [Authorize(Roles = "admin")]
         [HttpPut("{id}")]
-        public async Task<IActionResult> Update(int id, CreateProductDto dto)
+        public async Task<IActionResult> Update(
+            int id,
+            CreateProductDto dto)
         {
             var message = await _productService.UpdateAsync(id, dto);
             return Ok(new { message });
         }
 
+        /// <summary>
+        /// Видаляє товар із каталогу.
+        /// </summary>
+        /// <param name="id">Ідентифікатор товару.</param>
+        /// <returns>Повідомлення про результат видалення.</returns>
+        /// <response code="200">Товар успішно видалено.</response>
+        /// <response code="401">Користувач не авторизований.</response>
+        /// <response code="403">Користувач не має прав адміністратора.</response>
+        /// <response code="404">Товар не знайдено.</response>
         [Authorize(Roles = "admin")]
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
