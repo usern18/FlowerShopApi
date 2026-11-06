@@ -7,6 +7,7 @@ namespace FlowerShopApi.Repositories
         Task<List<Product>> GetAllAsync();
         Task<List<Product>> GetOutOfStockAsync();
         Task<Product?> GetByIdAsync(int id);
+        Task<List<Product>> GetByCategoryIdAsync(int categoryId);
         Task<bool> CategoryExistsAsync(int categoryId);
         Task AddAsync(Product product);
         Task SaveChangesAsync();
